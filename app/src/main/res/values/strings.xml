@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Covid Data</string>
+
+    <string name="corona_screen_title">Corona data</string>
+    <string name="corona_screen_country_hint">Country</string>
+    <string name="corona_screen_province_hint">Province</string>
+    <string name="corona_screen_city_hint">City</string>
+    <string name="corona_screen_no_statistics_message">Sorry, no statistics available for selected location. Try again later.</string>
+    <string name="corona_screen_uninitialized_message">Select your location to get info!</string>
+    <string name="corona_screen_confirmed_cases_label">Confirmed cases</string>
+    <string name="corona_screen_confirmed_cases_value">%1$d (%2$s)</string>
+    <string name="corona_screen_active_cases_label">Active cases</string>
+    <string name="corona_screen_active_cases_value">%1$d (%2$s)</string>
+    <string name="corona_screen_deaths_label">Deaths</string>
+    <string name="corona_screen_deaths_value">%1$d (%2$s)</string>
+    <string name="corona_screen_recovered_label">Recovered</string>
+    <string name="corona_screen_recovered_value">%1$d (%2$s)</string>
+</resources>

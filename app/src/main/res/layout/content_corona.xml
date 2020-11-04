@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/statistics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="48dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/confirmedCasesLabel"
+                            style="@style/TextAppearance.MaterialComponents.Caption"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@id/confirmedCasesValue"
+                            android:text="@string/corona_screen_confirmed_cases_label"
+                            android:textAllCaps="true" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/confirmedCasesValue"
+                            style="@style/TextAppearance.MaterialComponents.Body1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="101(+20)" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/activeCasesLabel"
+                            style="@style/TextAppearance.MaterialComponents.Caption"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:labelFor="@id/activeCasesValue"
+                            android:text="@string/corona_screen_active_cases_label"
+                            android:textAllCaps="true" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/activeCasesValue"
+                            style="@style/TextAppearance.MaterialComponents.Body1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            tools:text="101(+20)" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="?attr/colorOnSurface"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/deathsLabel"
+                            style="@style/TextAppearance.MaterialComponents.Caption"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@id/deathsValue"
+                            android:text="@string/corona_screen_deaths_label"
+                            android:textAllCaps="true" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/deathsValue"
+                            style="@style/TextAppearance.MaterialComponents.Body1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="101(+20)" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/recoveredLabel"
+                            style="@style/TextAppearance.MaterialComponents.Caption"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:labelFor="@id/recoveredValue"
+                            android:text="@string/corona_screen_recovered_label"
+                            android:textAllCaps="true" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/recoveredValue"
+                            style="@style/TextAppearance.MaterialComponents.Body1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            tools:text="101(+20)" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <FrameLayout
+            android:id="@+id/noStatisticsAvailable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/corona_screen_no_statistics_message" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/uninitialized"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/corona_screen_uninitialized_message" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:foregroundTint="?attr/colorSecondary"
+                android:theme="@style/ProgressBarTheme" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/buttons_background"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="32dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/debouncedButtonWithDisable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Debounced button with disabling" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/asyncButtonWithDisable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Async button with disabling" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/debouncedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Debounced button without disabling" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/asyncButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Async button without disabling" />
+    </LinearLayout>
+</LinearLayout>
