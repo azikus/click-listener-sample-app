@@ -11,6 +11,7 @@ open class DebouncedOnTapListener(
     behavior: OnTapBehavior,
     onTap: () -> Unit
 ) : OnTapListener(behavior, onTap) {
+
     override fun onTap(view: View?) {
         super.onTap(view)
         view?.postDelayed({

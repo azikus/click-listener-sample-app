@@ -9,14 +9,14 @@ class ChangeBackgroundColorOnTapBehavior(
     @ColorRes private val disabledColor: Int
 ) : OnTapBehavior {
 
-    override fun onEnable(view: View?) {
+    override fun onEnabled(view: View?) {
         if (view != null) {
             view.isEnabled = true
             view.setBackgroundColor(ContextCompat.getColor(view.context, enabledColor))
         }
     }
 
-    override fun onDisable(view: View?) {
+    override fun onDisabled(view: View?) {
         if (view != null) {
             view.isEnabled = false
             view.setBackgroundColor(ContextCompat.getColor(view.context, disabledColor))
