@@ -11,7 +11,7 @@ android {
     compileSdkVersion(App.compileSdk)
 
     defaultConfig {
-        applicationId = "com.azikus.clicklistenerexamples"
+        applicationId = "com.azikus.taplistenerexamples"
         minSdkVersion(App.minSdk)
         targetSdkVersion(App.targetSdk)
         versionCode = App.versionCode

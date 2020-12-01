@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.corona.CoronaActivity">
 
-    <com.azikus.clicklistenerexamples.ui.shared.BottomCornersAppBarLayout
+    <com.azikus.taplistenerexamples.ui.shared.BottomCornersAppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:animateLayoutChanges="true"
@@ -89,7 +89,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
-    </com.azikus.clicklistenerexamples.ui.shared.BottomCornersAppBarLayout>
+    </com.azikus.taplistenerexamples.ui.shared.BottomCornersAppBarLayout>
 
     <include layout="@layout/content_corona" />
 
