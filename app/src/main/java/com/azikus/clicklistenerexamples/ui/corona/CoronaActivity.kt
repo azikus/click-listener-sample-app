@@ -25,8 +25,7 @@ class CoronaActivity : AppCompatActivity() {
 
     private val viewModel: CoronaViewModel by viewModels()
 
-    private var asyncListener1: OnTapListener? = null
-    private var asyncListener2: OnTapListener? = null
+    private val asyncListeners: MutableList<OnTapListener> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +50,14 @@ class CoronaActivity : AppCompatActivity() {
                 )
             }
         }
-        asyncListener1 = asyncButton.onTapAsync(getStatistics)
-        asyncListener2 = asyncButtonWithDisable.onTapAsyncAndDisable(getStatistics)
-        debouncedButton.onTapDebounced(getStatistics)
-        debouncedButtonWithDisable.onTapDebouncedAndDisable(getStatistics)
+        asyncListeners += asyncButton.onTapAsync(getStatistics)
+        asyncListeners += asyncButtonWithDisable.onTapAsyncAndDisable(getStatistics)
+        asyncListeners += asyncButtonWithColorChange.onTapAsyncAndChangeBackgroundColor(R.color.primaryColor, R.color.error, getStatistics)
+
+        debouncedButton.onTapAsync(getStatistics)
+        debouncedButtonWithDisable.onTapAsyncAndDisable(getStatistics)
+        debouncedButtonWithColorChange.onTapAsyncAndChangeBackgroundColor(R.color.primaryColor, R.color.error, getStatistics)
+
         viewModel.setStateEvent(CoronaStateEvent.GetCountries)
     }
 
@@ -158,8 +161,7 @@ class CoronaActivity : AppCompatActivity() {
         deathsValue.text = getString(R.string.corona_screen_deaths_value, deaths, formatDiff(deathsDiff))
         recoveredValue.text = getString(R.string.corona_screen_recovered_value, recovered, formatDiff(recoveredDiff))
 
-        asyncListener1?.enable()
-        asyncListener2?.enable()
+        asyncListeners.forEach { it.isEnabled = true }
         content.showOnly(R.id.statistics)
     }
 

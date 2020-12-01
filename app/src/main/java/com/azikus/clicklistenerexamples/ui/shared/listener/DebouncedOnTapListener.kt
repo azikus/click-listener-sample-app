@@ -1,70 +1,37 @@
 package com.azikus.clicklistenerexamples.ui.shared.listener
 
 import android.view.View
-import androidx.databinding.BindingAdapter
-import java.lang.ref.WeakReference
-import java.util.concurrent.atomic.AtomicBoolean
+import com.azikus.clicklistenerexamples.R
 
-private const val DEFAULT_INTERVAL = 250L
+private const val DEFAULT_INTERVAL = 5000L
 
 open class DebouncedOnTapListener(
-    private val onTap: () -> Unit,
+    onTap: () -> Unit,
+    behavior: OnTapBehavior,
     private val intervalMs: Long = DEFAULT_INTERVAL
-) : OnTapListener {
-
-    override val view: View?
-        get() = viewWeakReference?.get()
-
-    private var viewWeakReference: WeakReference<View?>? = null
-    private var canClick = AtomicBoolean(true)
-
-    override fun onClick(v: View?) {
-        if (clickDisabled()) {
-            return
-        }
-        viewWeakReference = WeakReference(v)
-        disable()
-        onTap()
-
-        v?.postDelayed({
-            canClick.set(true)
-            enable()
+) : OnTapListener(onTap, behavior) {
+    override fun onTap(view: View?) {
+        super.onTap(view)
+        view?.postDelayed({
+            isEnabled = true
         }, intervalMs)
     }
-
-    private fun clickDisabled() = !canClick.getAndSet(false)
 }
 
-open class DebouncedAndDisableOnTapListener(
-    onTap: () -> Unit,
-    intervalMs: Long = DEFAULT_INTERVAL
-) : DebouncedOnTapListener(onTap, intervalMs) {
-    override fun onEnable(v: View?) {
-        v?.isEnabled = true
-    }
-
-    override fun onDisable(v: View?) {
-        v?.isEnabled = false
-    }
-}
-
-@BindingAdapter(value = ["onTapDebounced", "onTapDebouncedAndDisable", "intervalMs"], requireAll = false)
-fun View.onTapDebouncedAndDisableBinding(onTap: View.OnClickListener?, onTapAndDisable: View.OnClickListener?, intervalMs: Long?) {
-    when {
-        onTap != null -> onTapDebounced({ onTap.onClick(null) }, intervalMs ?: DEFAULT_INTERVAL)
-        onTapAndDisable != null -> onTapDebouncedAndDisable({ onTapAndDisable.onClick(null) }, intervalMs ?: DEFAULT_INTERVAL)
-        else -> setOnClickListener(null)
-    }
-}
-
-fun View.onTapDebounced(onTap: () -> Unit, intervalMs: Long = DEFAULT_INTERVAL): DebouncedOnTapListener {
-    val tapListener = DebouncedOnTapListener(onTap, intervalMs)
-    setOnClickListener(tapListener)
+fun View.onTapDebounced(onTap: () -> Unit, intervalMs: Long = DEFAULT_INTERVAL): OnTapListener {
+    val tapListener = DebouncedOnTapListener(onTap, DoNothingOnTapBehavior(), intervalMs)
+    setOnClickListener(tapListener::onTap)
     return tapListener
 }
 
-fun View.onTapDebouncedAndDisable(onTap: () -> Unit, intervalMs: Long = DEFAULT_INTERVAL): DebouncedOnTapListener {
-    val tapListener = DebouncedAndDisableOnTapListener(onTap, intervalMs)
-    setOnClickListener(tapListener)
+fun View.onTapDebouncedAndDisable(onTap: () -> Unit): OnTapListener {
+    val tapListener = DebouncedOnTapListener(onTap, DisableViewOnTapBehavior())
+    setOnClickListener(tapListener::onTap)
+    return tapListener
+}
+
+fun View.onTapDebouncedAndChangeBackgroundColor(onTap: () -> Unit): OnTapListener {
+    val tapListener = DebouncedOnTapListener(onTap, ChangeBackgroundColorOnTapBehavior(R.color.primaryColor, R.color.error))
+    setOnClickListener(tapListener::onTap)
     return tapListener
 }

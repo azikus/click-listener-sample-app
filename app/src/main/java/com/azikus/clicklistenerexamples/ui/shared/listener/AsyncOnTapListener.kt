@@ -1,57 +1,32 @@
 package com.azikus.clicklistenerexamples.ui.shared.listener
 
 import android.view.View
-import java.lang.ref.WeakReference
-import java.util.concurrent.atomic.AtomicBoolean
+import androidx.annotation.ColorRes
+import com.azikus.clicklistenerexamples.R
 
 open class AsyncOnTapListener(
-    private val onTap: () -> Unit
-) : OnTapListener {
+    onTap: () -> Unit,
+    behavior: OnTapBehavior
+) : OnTapListener(onTap, behavior)
 
-    override val view: View?
-        get() = viewWeakReference?.get()
-
-    private var viewWeakReference: WeakReference<View?>? = null
-    private var canClick = AtomicBoolean(true)
-
-    override fun onClick(v: View?) {
-        if (clickDisabled()) {
-            return
-        }
-        viewWeakReference = WeakReference(v)
-        disable()
-        onTap()
-    }
-
-    override fun enable() {
-        super.enable()
-        canClick.set(true)
-        viewWeakReference = null
-    }
-
-    private fun clickDisabled() = !canClick.getAndSet(false)
-}
-
-open class AsyncAndDisableOnTapListener(
-    onTap: () -> Unit
-) : AsyncOnTapListener(onTap) {
-    override fun onEnable(v: View?) {
-        v?.isEnabled = true
-    }
-
-    override fun onDisable(v: View?) {
-        v?.isEnabled = false
-    }
-}
-
-fun View.onTapAsync(onTap: () -> Unit): AsyncOnTapListener {
-    val tapListener = AsyncOnTapListener(onTap)
-    setOnClickListener(tapListener)
+fun View.onTapAsync(onTap: () -> Unit): OnTapListener {
+    val tapListener = AsyncOnTapListener(onTap, DoNothingOnTapBehavior())
+    setOnClickListener(tapListener::onTap)
     return tapListener
 }
 
-fun View.onTapAsyncAndDisable(onTap: () -> Unit): AsyncOnTapListener {
-    val tapListener = AsyncAndDisableOnTapListener(onTap)
-    setOnClickListener(tapListener)
+fun View.onTapAsyncAndDisable(onTap: () -> Unit): OnTapListener {
+    val tapListener = AsyncOnTapListener(onTap, DisableViewOnTapBehavior())
+    setOnClickListener(tapListener::onTap)
+    return tapListener
+}
+
+fun View.onTapAsyncAndChangeBackgroundColor(
+    @ColorRes enabledColor: Int = R.color.primaryColor,
+    @ColorRes disabledColor: Int = R.color.error,
+    onTap: () -> Unit
+): OnTapListener {
+    val tapListener = AsyncOnTapListener(onTap, ChangeBackgroundColorOnTapBehavior(enabledColor, disabledColor))
+    setOnClickListener(tapListener::onTap)
     return tapListener
 }
