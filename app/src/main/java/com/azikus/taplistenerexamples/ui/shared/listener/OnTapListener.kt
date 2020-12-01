@@ -5,8 +5,8 @@ import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class OnTapListener(
-    private val onTap: () -> Unit,
-    private val behavior: OnTapBehavior
+    private val behavior: OnTapBehavior,
+    private val onTap: () -> Unit
 ) {
 
     var isEnabled: Boolean

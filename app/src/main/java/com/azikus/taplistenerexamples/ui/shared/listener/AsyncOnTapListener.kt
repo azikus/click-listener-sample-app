@@ -5,18 +5,18 @@ import androidx.annotation.ColorRes
 import com.azikus.taplistenerexamples.R
 
 open class AsyncOnTapListener(
-    onTap: () -> Unit,
-    behavior: OnTapBehavior
-) : OnTapListener(onTap, behavior)
+    behavior: OnTapBehavior,
+    onTap: () -> Unit
+) : OnTapListener(behavior, onTap)
 
 fun View.onTapAsync(onTap: () -> Unit): OnTapListener {
-    val tapListener = AsyncOnTapListener(onTap, DoNothingOnTapBehavior())
+    val tapListener = AsyncOnTapListener(DoNothingOnTapBehavior(), onTap)
     setOnClickListener(tapListener::onTap)
     return tapListener
 }
 
 fun View.onTapAsyncAndDisable(onTap: () -> Unit): OnTapListener {
-    val tapListener = AsyncOnTapListener(onTap, DisableViewOnTapBehavior())
+    val tapListener = AsyncOnTapListener(DisableViewOnTapBehavior(), onTap)
     setOnClickListener(tapListener::onTap)
     return tapListener
 }
@@ -26,7 +26,7 @@ fun View.onTapAsyncAndChangeBackgroundColor(
     @ColorRes disabledColor: Int = R.color.error,
     onTap: () -> Unit
 ): OnTapListener {
-    val tapListener = AsyncOnTapListener(onTap, ChangeBackgroundColorOnTapBehavior(enabledColor, disabledColor))
+    val tapListener = AsyncOnTapListener(ChangeBackgroundColorOnTapBehavior(enabledColor, disabledColor), onTap)
     setOnClickListener(tapListener::onTap)
     return tapListener
 }

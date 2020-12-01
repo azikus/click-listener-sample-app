@@ -33,32 +33,46 @@ class CoronaActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         subscribeObservers()
-        val getStatistics = {
-            val dataState = viewModel.dataState.value
-            val country = dataState?.countries?.firstOrNull { it.name == countrySelector.text.toString() }
-            val province = dataState?.provinces?.firstOrNull { it.province == provinceSelector.text.toString() }
-            val city = dataState?.cities?.firstOrNull { it.name == citySelector.text.toString() }
 
-            val isoCountryCode = country?.iso
-            if (isoCountryCode != null) {
-                viewModel.setStateEvent(
-                    CoronaStateEvent.GetStatistics(
-                        isoCountryCode = isoCountryCode,
-                        provinceName = province?.province,
-                        cityName = city?.name
-                    )
-                )
-            }
+        asyncListeners += asyncButton.onTapAsync {
+            getStatistics()
         }
-        asyncListeners += asyncButton.onTapAsync(getStatistics)
-        asyncListeners += asyncButtonWithDisable.onTapAsyncAndDisable(getStatistics)
-        asyncListeners += asyncButtonWithColorChange.onTapAsyncAndChangeBackgroundColor(R.color.primaryColor, R.color.error, getStatistics)
+        asyncListeners += asyncButtonWithDisable.onTapAsyncAndDisable{
+            getStatistics()
+        }
+        asyncListeners += asyncButtonWithColorChange.onTapAsyncAndChangeBackgroundColor(R.color.primaryColor, R.color.error) {
+            getStatistics()
+        }
 
-        debouncedButton.onTapAsync(getStatistics)
-        debouncedButtonWithDisable.onTapAsyncAndDisable(getStatistics)
-        debouncedButtonWithColorChange.onTapAsyncAndChangeBackgroundColor(R.color.primaryColor, R.color.error, getStatistics)
+        debouncedButton.onTapDebounced {
+            getStatistics()
+        }
+        debouncedButtonWithDisable.onTapDebouncedAndDisable {
+            getStatistics()
+        }
+        debouncedButtonWithColorChange.onTapDebouncedAndChangeBackgroundColor(enabledColor = R.color.primaryColor, disabledColor = R.color.error) {
+            getStatistics()
+        }
 
         viewModel.setStateEvent(CoronaStateEvent.GetCountries)
+    }
+
+    private fun getStatistics() {
+        val dataState = viewModel.dataState.value
+        val country = dataState?.countries?.firstOrNull { it.name == countrySelector.text.toString() }
+        val province = dataState?.provinces?.firstOrNull { it.province == provinceSelector.text.toString() }
+        val city = dataState?.cities?.firstOrNull { it.name == citySelector.text.toString() }
+
+        val isoCountryCode = country?.iso
+        if (isoCountryCode != null) {
+            viewModel.setStateEvent(
+                CoronaStateEvent.GetStatistics(
+                    isoCountryCode = isoCountryCode,
+                    provinceName = province?.province,
+                    cityName = city?.name
+                )
+            )
+        }
     }
 
     private fun subscribeObservers() {
