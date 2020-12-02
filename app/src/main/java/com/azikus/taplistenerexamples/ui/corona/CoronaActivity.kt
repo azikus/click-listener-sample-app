@@ -37,7 +37,7 @@ class CoronaActivity : AppCompatActivity() {
         asyncListeners += asyncButton.onTapAsync {
             getStatistics()
         }
-        asyncListeners += asyncButtonWithDisable.onTapAsyncAndDisable{
+        asyncListeners += asyncButtonWithDisable.onTapAsyncAndDisable {
             getStatistics()
         }
         asyncListeners += asyncButtonWithColorChange.onTapAsyncAndChangeBackgroundColor(R.color.primaryColor, R.color.error) {
@@ -77,15 +77,21 @@ class CoronaActivity : AppCompatActivity() {
 
     private fun subscribeObservers() {
         viewModel.dataState.observe(this) { dataState ->
-            if (dataState.countries.isNotEmpty()) {
-                displayCountries(dataState.countries)
+            displayCountries(dataState.countries)
+            displayProvinces(dataState.provinces)
+            displayCities(dataState.cities)
+
+            if (dataState.provinces.isEmpty()) {
+                provinceSelector.text = null
+                provinceSelector.setAdapter(null)
+                provinceSelectorLayout.visibility = View.GONE
             }
-            if (dataState.provinces.isNotEmpty()) {
-                displayProvinces(dataState.provinces)
+            if (dataState.cities.isEmpty()) {
+                citySelector.text = null
+                citySelector.setAdapter(null)
+                citySelectorLayout.visibility = View.GONE
             }
-            if (dataState.cities.isNotEmpty()) {
-                displayCities(dataState.cities)
-            }
+
             displayLoadingIndicator(dataState is CoronaViewState.Loading)
 
             when (dataState) {
@@ -116,15 +122,10 @@ class CoronaActivity : AppCompatActivity() {
                 buttons.setChildrenEnabled(isoCountryCode != null)
                 if (isoCountryCode != null) {
                     viewModel.setStateEvent(CoronaStateEvent.GetProvinces(isoCountryCode))
+                    provinceSelector.text = null
                 }
             })
         }
-
-        provinceSelector.setAdapter(null)
-        provinceSelectorLayout.visibility = View.GONE
-
-        citySelector.setAdapter(null)
-        citySelectorLayout.visibility = View.GONE
     }
 
     private fun displayProvinces(provinces: List<Province>) {
@@ -136,15 +137,10 @@ class CoronaActivity : AppCompatActivity() {
                     val province = provinces.firstOrNull { it.province == text.toString() }
                     if (province != null) {
                         viewModel.setStateEvent(CoronaStateEvent.GetCities(province.iso, province.province))
+                        citySelector.text = null
                     }
                 })
             }
-
-            citySelector.setAdapter(null)
-            citySelectorLayout.visibility = View.GONE
-        } else {
-            provinceSelector.setAdapter(null)
-            provinceSelectorLayout.visibility = View.GONE
         }
     }
 
@@ -152,9 +148,6 @@ class CoronaActivity : AppCompatActivity() {
         if (cities.isNotEmpty()) {
             citySelectorLayout.visibility = View.VISIBLE
             citySelector.setAdapter(NoFilterAdapter(this, cities.map { it.name }.toTypedArray()))
-        } else {
-            citySelector.setAdapter(null)
-            citySelectorLayout.visibility = View.GONE
         }
     }
 

@@ -2,9 +2,15 @@ package com.azikus.taplistenerexamples.ui.corona
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.azikus.taplistenerexamples.domain.repository.CovidRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class CoronaViewModel @ViewModelInject constructor(
     private val repository: CovidRepository,
@@ -16,42 +22,39 @@ class CoronaViewModel @ViewModelInject constructor(
     private val _dataState: MutableLiveData<CoronaViewState> = MutableLiveData()
 
     fun setStateEvent(stateEvent: CoronaStateEvent) {
-        viewModelScope.launch {
+        viewModelScope.launch(context = Dispatchers.Default) {
             when (stateEvent) {
                 CoronaStateEvent.GetCountries -> {
                     val countries = repository.getRegions()
                     val lastState = _dataState.value.orInitialState()
-                    _dataState.postValue(
-                        when (lastState) {
-                            is CoronaViewState.Uninitialized -> lastState.copy(countries = countries)
-                            is CoronaViewState.Loading -> lastState.copy(countries = countries)
-                            is CoronaViewState.Loaded -> lastState.copy(countries = countries)
-                            is CoronaViewState.NoData -> lastState.copy(countries = countries)
-                        }
-                    )
+
+                    try {
+                        _dataState.postValue(
+                            lastState.copyHelper(
+                                countries = countries,
+                                provinces = emptyList(),
+                                cities = emptyList()
+                            )
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
                 is CoronaStateEvent.GetProvinces -> {
                     val provinces = repository.getProvinces(stateEvent.isoCountryCode)
                     val lastState = _dataState.value.orInitialState()
                     _dataState.postValue(
-                        when (lastState) {
-                            is CoronaViewState.Uninitialized -> lastState.copy(provinces = provinces)
-                            is CoronaViewState.Loading -> lastState.copy(provinces = provinces)
-                            is CoronaViewState.Loaded -> lastState.copy(provinces = provinces)
-                            is CoronaViewState.NoData -> lastState.copy(provinces = provinces)
-                        }
+                        lastState.copyHelper(
+                            provinces = provinces,
+                            cities = emptyList()
+                        )
                     )
                 }
                 is CoronaStateEvent.GetCities -> {
                     val report = repository.getReportList(stateEvent.isoCountryCode, stateEvent.provinceName, null).getOrNull(0)
                     val lastState = _dataState.value.orInitialState()
                     _dataState.postValue(
-                        when (lastState) {
-                            is CoronaViewState.Uninitialized -> lastState.copy(cities = report?.region?.cities.orEmpty())
-                            is CoronaViewState.Loading -> lastState.copy(cities = report?.region?.cities.orEmpty())
-                            is CoronaViewState.Loaded -> lastState.copy(cities = report?.region?.cities.orEmpty())
-                            is CoronaViewState.NoData -> lastState.copy(cities = report?.region?.cities.orEmpty())
-                        }
+                        lastState.copyHelper(cities = report?.region?.cities.orEmpty())
                     )
                 }
                 is CoronaStateEvent.GetStatistics -> {
@@ -60,10 +63,7 @@ class CoronaViewModel @ViewModelInject constructor(
                         CoronaViewState.Loading(
                             countries = lastState.countries,
                             provinces = lastState.provinces,
-                            cities = lastState.cities,
-                            selectedCountry = lastState.selectedCountry,
-                            selectedProvince = lastState.selectedProvince,
-                            selectedCity = lastState.selectedCity
+                            cities = lastState.cities
                         )
                     )
                     val report = repository.getReportList(stateEvent.isoCountryCode, stateEvent.provinceName, stateEvent.cityName).getOrNull(0)
@@ -72,10 +72,7 @@ class CoronaViewModel @ViewModelInject constructor(
                             CoronaViewState.NoData(
                                 countries = lastState.countries,
                                 provinces = lastState.provinces,
-                                cities = lastState.cities,
-                                selectedCountry = lastState.selectedCountry,
-                                selectedProvince = lastState.selectedProvince,
-                                selectedCity = lastState.selectedCity
+                                cities = lastState.cities
                             )
                         )
                     } else {
@@ -84,9 +81,6 @@ class CoronaViewModel @ViewModelInject constructor(
                                 countries = lastState.countries,
                                 provinces = lastState.provinces,
                                 cities = lastState.cities,
-                                selectedCountry = lastState.selectedCountry,
-                                selectedProvince = lastState.selectedProvince,
-                                selectedCity = lastState.selectedCity,
                                 lastUpdate = report.lastUpdate,
                                 confirmed = report.confirmed,
                                 deaths = report.deaths,
