@@ -2,7 +2,6 @@ package com.azikus.taplistenerexamples.ui.shared.listener
 
 import android.view.View
 import androidx.annotation.CallSuper
-import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class OnTapListener(
@@ -15,13 +14,13 @@ abstract class OnTapListener(
         set(value) {
             canTap.set(value)
             if (value) {
-                behavior.onEnabled(viewWeakReference.get())
+                behavior.onEnabled(view)
             } else {
-                behavior.onDisabled(viewWeakReference.get())
+                behavior.onDisabled(view)
             }
         }
 
-    private var viewWeakReference: WeakReference<View?> = WeakReference(null)
+    private var view: View? = null
     private val canTap = AtomicBoolean(true)
     private val isTapDisabled: Boolean
         get() = !canTap.getAndSet(false)
@@ -29,7 +28,7 @@ abstract class OnTapListener(
     @CallSuper
     open fun onTap(view: View?) {
         if (isTapDisabled) return
-        viewWeakReference = WeakReference(view)
+        this.view = view
         isEnabled = false
         onTap()
     }
