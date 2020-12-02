@@ -203,48 +203,88 @@
         android:background="@drawable/buttons_background"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
+        android:weightSum="3"
         android:paddingVertical="32dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/debouncedButton"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Debounced button with disabling" />
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/buttons_background"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:weightSum="2">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/debouncedButtonWithDisable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Debounced button + Disable" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/debouncedButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Debounced button with disabling" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/debouncedButtonWithColorChange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Debounced button + Change color" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/asyncButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Async button" />
+        </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/asyncButton"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Async button" />
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@drawable/buttons_background"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/asyncButtonWithDisable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Async button + Disable" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/debouncedButtonWithDisable"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Debounced button + Disable" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/asyncButtonWithColorChange"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/asyncButtonWithDisable"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Async button + Disable" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Async button + Change color" />
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@drawable/buttons_background"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/debouncedButtonWithColorChange"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Debounced button + Change color" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/asyncButtonWithColorChange"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Async button + Change color" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
